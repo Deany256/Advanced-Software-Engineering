@@ -7,44 +7,34 @@ class Program
         Console.WriteLine("BMI Calculator");
         Console.WriteLine("---------------");
 
-        Console.Write("Enter 'I' for Imperial or 'M' for Metric");
-        string isMetric = Console.ReadLine();
-
         // Input: Get weight in kilograms from the user
-        Console.Write("Enter your weight in kilograms/pounds: ");
+        Console.Write("Enter your weight in kilograms: ");
         double weight = Convert.ToDouble(Console.ReadLine());
 
         // Input: Get height in meters from the user
-        Console.Write("Enter your height in meters/inches: ");
+        Console.Write("Enter your height in meters: ");
         double height = Convert.ToDouble(Console.ReadLine());
 
-        if (isMetric = "M") {
-            double bmi = CalculateMBMI(weight, height);
-        } else if (isMetric = "I") {
-            double bmi = CalculateIBMI(weight, height);
-        } else {
-            Main()
-        }
+        // Calculate BMI
+        double bmi = CalculateBMI(weight, height);
 
         // Display the calculated BMI
         Console.WriteLine($"Your BMI is: {bmi:F2}");
 
+        // Interpret the BMI value
         InterpretBMI(bmi);
 
         Console.ReadLine(); // Pause to see the result
     }
 
     // Function to calculate BMI
-    static double CalculateMBMI(double weight, double height)
+    static double CalculateBMI(double weight, double height)
     {
+        // Formula for BMI: weight (kg) / (height (m) * height (m))
         return weight / (height * height);
     }
 
-    static double CalculateIBMI(double weight, double height)
-    {
-        return weight / (height * height * 703);
-    }
-
+    // Function to interpret BMI
     static void InterpretBMI(double bmi)
     {
         Console.Write("Interpretation: ");
