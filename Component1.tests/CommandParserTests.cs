@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Component1.tests
@@ -168,6 +169,107 @@ namespace Component1.tests
             // Assert
             // Add assertions based on the expected outcome of the command
         }
+
+
+
+
+        private const string TestFileName = "TestFile.txt";
+
+        [TestMethod]
+        public void SaveFile_ValidFileNameAndCommands_FileIsCreated()
+        {
+            // Arrange
+            var form = new Form1();
+            var commandParser = new CommandParser(form);
+            string[] commands = { "moveto 10 20", "drawcircle 15 true", "setcolour red" };
+
+            // Act
+            commandParser.SaveFile(TestFileName, commands);
+
+            // Assert
+            Assert.IsTrue(File.Exists(TestFileName));
+
+            // Cleanup
+            File.Delete(TestFileName);
+        }
+
+        [TestMethod]
+        public void OpenFile_ValidFileNameAndCommands_CommandsAreExecuted()
+        {
+            // Arrange
+            var form = new Form1();
+            var commandParser = new CommandParser(form);
+            string[] originalCommands = { "moveto 10 20", "drawcircle 15 true", "setcolour red" };
+
+            // Save commands to a file
+            commandParser.SaveFile(TestFileName, originalCommands);
+
+            // Act
+            commandParser.OpenFile(TestFileName);
+
+            // Assert
+            // You may want to assert the effects of the executed commands on the form or command parser state
+
+            // Cleanup
+            File.Delete(TestFileName);
+        }
+
+        [TestMethod]
+        public void SaveFile_InvalidFileName_ThrowsException()
+        {
+            // Arrange
+            var form = new Form1();
+            var commandParser = new CommandParser(form);
+            string[] commands = { "moveto 10 20", "drawcircle 15 true", "setcolour red" };
+
+            // Act and Assert
+            Assert.ThrowsException<ArgumentException>(() => commandParser.SaveFile(string.Empty, commands));
+        }
+
+        [TestMethod]
+        public void OpenFile_NonExistentFile_ThrowsException()
+        {
+            // Arrange
+            var form = new Form1();
+            var commandParser = new CommandParser(form);
+
+            // Act and Assert
+            try
+            {
+                commandParser.OpenFile("NonExistentFile.txt");
+                Assert.Fail("Expected FileNotFoundException was not thrown.");
+            }
+            catch (FileNotFoundException ex)
+            {
+                // Assert specific properties of the exception if needed
+                Assert.AreEqual("NonExistentFile.txt", ex.FileName);
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Expected FileNotFoundException was not thrown.");
+            }
+        }
+
+        [TestMethod]
+        public void OpenFile_EmptyFile_NoCommandsExecuted()
+        {
+            // Arrange
+            var form = new Form1();
+            var commandParser = new CommandParser(form);
+
+            // Create an empty file
+            File.WriteAllText(TestFileName, string.Empty);
+
+            // Act
+            commandParser.OpenFile(TestFileName);
+
+            // Assert
+            // Ensure that no commands are executed or the state remains unchanged
+
+            // Cleanup
+            File.Delete(TestFileName);
+        }
+
 
 
         private bool ThrowsException<T>(Action action) where T : Exception
