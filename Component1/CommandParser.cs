@@ -220,6 +220,16 @@ namespace Component1
 
                         case "save":
                             // save command
+                            if (commandArray.Length == 2)
+                            {
+                                string filename = $"{commandArray[1]}.txt";
+
+                                SaveFile(filename, formInstance.textBox2.Lines);
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Saved multiline box");
+                            }
                             break;
 
                         case "load":
