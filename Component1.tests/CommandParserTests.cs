@@ -270,8 +270,6 @@ namespace Component1.tests
             File.Delete(TestFileName);
         }
 
-
-
         private bool ThrowsException<T>(Action action) where T : Exception
         {
             try
