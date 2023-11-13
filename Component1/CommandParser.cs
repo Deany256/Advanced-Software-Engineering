@@ -249,7 +249,20 @@ namespace Component1
 
                         case "setcolour":
                             // setcolour logic
-                            
+                            if (lowerCaseCommandArray.Length == 2)
+                            {
+                                // Set color based on preset color
+                                SetColorByPreset(lowerCaseCommandArray[1]);
+                                SendMessage($"Color set to {lowerCaseCommandArray[1]}");
+                            }
+                            else if (lowerCaseCommandArray.Length == 4)
+                            {
+                                // Set color based on RGB values
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid parameters for 'setcolour' command.");
+                            }
                             break;
 
                         
