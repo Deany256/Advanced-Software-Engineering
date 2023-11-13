@@ -2,16 +2,31 @@
 
 namespace Component1
 {
-    class Triangle : Shape
+    /// <summary>
+    /// Represents a triangle shape with a specified color, position, side length, and fill status.
+    /// </summary>
+    public class Triangle : Shape
     {
-        private int sideLength;
+        private int sideLength; // Length of each side of the triangle
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Triangle"/> class with the specified parameters.
+        /// </summary>
+        /// <param name="colour">The color of the triangle.</param>
+        /// <param name="x">The X-coordinate of the triangle's centroid.</param>
+        /// <param name="y">The Y-coordinate of the triangle's centroid.</param>
+        /// <param name="sideLength">The length of each side of the triangle.</param>
+        /// <param name="isFilled">A value indicating whether the triangle should be filled.</param>
         public Triangle(Color colour, int x, int y, int sideLength, bool isFilled)
             : base(colour, x, y, isFilled)
         {
             this.sideLength = sideLength;
         }
 
+        /// <summary>
+        /// Draws the triangle on the specified graphics surface.
+        /// </summary>
+        /// <param name="g">The graphics surface on which to draw the triangle.</param>
         public override void Draw(Graphics g)
         {
             using (Brush brush = new SolidBrush(colour))
