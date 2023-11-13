@@ -80,12 +80,30 @@ namespace Component1
 
         public void OpenFile(string save) 
         {
-            
+            if (File.Exists(save))
+            {
+                using (StreamReader reader = new StreamReader(save))
+                {
+                    // Read and display each line
+                    while (!reader.EndOfStream)
+                    {
+                        string command = reader.ReadLine();
+                        ExecuteCommand(command);
+                    }
+                }
+            }
         }
 
         public void SaveFile(string savename, string[] commands) 
         {
-            
+            using (StreamWriter writer = new StreamWriter(savename)) 
+            {
+                // Write each string in the array as a separate line
+                foreach (string line in commands)
+                {
+                    writer.WriteLine(line);
+                }
+            }  
         }
     }
 }
