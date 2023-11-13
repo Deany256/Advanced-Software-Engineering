@@ -287,7 +287,17 @@ namespace Component1
 
                         case "drawcircle":
                             // draw circle
-                            
+                            if (lowerCaseCommandArray.Length == 3)
+                            {
+                                Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), true);
+                                circle.Draw(g);
+                            }
+                            else
+                            {
+                                Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), false);
+                                circle.Draw(g);
+                            }
+                            SendMessage("Circle drawn.");
                             break;
 
                         case "drawtriangle":
