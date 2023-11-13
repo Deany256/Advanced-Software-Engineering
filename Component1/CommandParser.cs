@@ -154,7 +154,24 @@ namespace Component1
 
         public void ExecuteCommand(string command)
         {
-            
+            try
+            {
+                var g = formInstance.pictureBox1.CreateGraphics();
+
+                // Split the command into an array of strings
+                string[] commandArray = command.Split(' ');
+
+                // Convert the commandArray to lowercase for case-insensitive comparison
+                string[] lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
+
+                CheckSyntax(lowerCaseCommandArray);
+
+            }
+            catch (Exception ex)
+            {
+                // Report the exception
+                SendMessage($"Error: {ex.Message}");
+            }
         }
 
         public int GetCurrentX()
