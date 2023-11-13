@@ -13,12 +13,12 @@ namespace Component1
     /// <summary>
     /// Parses and executes commands for drawing shapes and interacting with a drawing canvas.
     /// </summary>
-    class CommandParser
+    public class CommandParser
     {
         private Form1 formInstance;
         private int currentX;
         private int currentY;
-        private Color currentColor; // Store the current color
+        public Color currentColor { get; private set; } // Store the current color
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandParser"/> class.
