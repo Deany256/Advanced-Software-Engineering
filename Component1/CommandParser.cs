@@ -10,12 +10,20 @@ using System.IO;
 
 namespace Component1
 {
+    /// <summary>
+    /// Parses and executes commands for drawing shapes and interacting with a drawing canvas.
+    /// </summary>
     class CommandParser
     {
         private Form1 formInstance;
         private int currentX;
         private int currentY;
         private Color currentColor; // Store the current color
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandParser"/> class.
+        /// </summary>
+        /// <param name="formInstance">The instance of the main form associated with the parser.</param>
 
         public CommandParser(Form1 formInstance)
         {
@@ -24,6 +32,9 @@ namespace Component1
             currentColor = Color.Black; // Set initial color
         }
 
+        /// <summary>
+        /// Resets the current coordinates to the top left of the picture box.
+        /// </summary>
         public void Reset()
         {
             // set current coordinates to the top left of the picturebox
@@ -31,12 +42,20 @@ namespace Component1
             currentY = 0;
         }
 
+        /// <summary>
+        /// Clears the picture box.
+        /// </summary>
         public void ClearPictureBox()
         {
             formInstance.pictureBox1.Image = null;
 
         }
 
+        /// <summary>
+        /// Checks the syntax of the provided command array.
+        /// Acts like a gate keeper
+        /// </summary>
+        /// <param name="commandArray">The array containing the command and its parameters.</param>
         public void CheckSyntax(string[] commandArray)
         {
             if (commandArray.Length == 0)
@@ -152,6 +171,11 @@ namespace Component1
             }
         }
 
+        /// <summary>
+        /// Executes the provided command.
+        /// Runs CheckSyntax method that means this method can trust the command array
+        /// </summary>
+        /// <param name="command">The command to be executed.</param>
         public void ExecuteCommand(string command)
         {
             try
@@ -331,22 +355,39 @@ namespace Component1
             }
         }
 
+        /// <summary>
+        /// Gets the current X-coordinate.
+        /// </summary>
+        /// <returns>The current X-coordinate.</returns>
         public int GetCurrentX()
         {
             return currentX;
         }
 
+        /// <summary>
+        /// Gets the current Y-coordinate.
+        /// </summary>
+        /// <returns>The current Y-coordinate.</returns>
         public int GetCurrentY()
         {
             return currentY;
         }
 
+        /// <summary>
+        /// Displays a message in the associated form's label.
+        /// </summary>
+        /// <param name="message">The message to be displayed.</param>
         public void SendMessage(string message)
         {
             // Display the message in the label with the name 'label1'
             formInstance.label1.Text = message;
         }
 
+        /// <summary>
+        /// Sets the current color based on a preset color name.
+        /// </summary>
+        /// <param name="presetColor">The name of the preset color (e.g., "red", "blue", "green", "black").</param>
+        /// <exception cref="ArgumentException">Thrown when an invalid preset color is provided.</exception>
         private void SetColorByPreset(string presetColor)
         {
             // Add more preset color checks as needed
@@ -361,14 +402,25 @@ namespace Component1
                 case "green":
                     currentColor = Color.Green;
                     break;
+                case "black":
+                    currentColor = Color.Black;
+                    break;
                 default:
                     throw new ArgumentException($"Invalid preset color: {presetColor}");
             }
         }
 
+        /// <summary>
+        /// Sets the current color based on RGB values.
+        /// </summary>
+        /// <param name="r">The red component of the color (0-255).</param>
+        /// <param name="g">The green component of the color (0-255).</param>
+        /// <param name="b">The blue component of the color (0-255).</param>
+        /// <exception cref="ArgumentException">Thrown when invalid RGB values are provided.</exception>
+
         private void SetColorByRGB(int r, int g, int b)
         {
-            // Validate RGB values if needed
+            // Validate RGB values
             if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
             {
                 throw new ArgumentException("Invalid RGB values.");
@@ -376,6 +428,10 @@ namespace Component1
             currentColor = Color.FromArgb(r, g, b);
         }
 
+        /// <summary>
+        /// Opens a file and executes the commands stored in it.
+        /// </summary>
+        /// <param name="save">The name of the file to be opened.</param>
         public void OpenFile(string save) 
         {
             if (File.Exists(save))
@@ -392,6 +448,12 @@ namespace Component1
             }
         }
 
+
+        /// <summary>
+        /// Saves the provided commands to a file with the specified name.
+        /// </summary>
+        /// <param name="savename">The name of the file to be saved.</param>
+        /// <param name="commands">The array of commands to be saved.</param>
         public void SaveFile(string savename, string[] commands) 
         {
             using (StreamWriter writer = new StreamWriter(savename)) 
