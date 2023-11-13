@@ -302,6 +302,17 @@ namespace Component1
 
                         case "drawtriangle":
                             // draw triangle
+                            if (lowerCaseCommandArray.Length == 3)
+                            {
+                                Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), true);
+                                triangle.Draw(g);
+                            }
+                            else
+                            {
+                                Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), false);
+                                triangle.Draw(g);
+                            }
+                            SendMessage("Triangle drawn.");
                             break;
 
                         default:
