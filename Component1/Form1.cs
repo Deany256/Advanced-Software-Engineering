@@ -116,7 +116,7 @@ namespace Component1
 
         public void ClearPictureBox()
         {
-
+            pictureBox1.Image = null;
 
         }
     }
