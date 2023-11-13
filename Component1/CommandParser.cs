@@ -172,6 +172,8 @@ namespace Component1
                     {
                         case "clear":
                             // clear command
+                            ClearPictureBox();
+                            SendMessage("Canvas has been cleared.");
                             break;
 
                         case "reset":
