@@ -198,6 +198,24 @@ namespace Component1
 
                         case "drawto":
                             // drawto commands
+                            if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int drawtoX) && int.TryParse(lowerCaseCommandArray[2], out int drawtoY))
+                            {
+                                // Create an instance of Pen
+                                Pen pen = new Pen(currentColor);
+
+                                // Draw a line from the current position to the specified end point
+                                formInstance.pictureBox1.CreateGraphics().DrawLine(pen, currentX, currentY, drawtoX, drawtoY);
+
+                                // Update the current position
+                                currentX = drawtoX;
+                                currentY = drawtoY;
+
+                                SendMessage($"Line drawn to X: {drawtoX}, Y: {drawtoY}");
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid parameters for 'drawto' command.");
+                            }
                             break;
 
                         case "save":

@@ -1,0 +1,5 @@
+testing files
+
+moveto 100 100
+setcolour red
+drawcircle 50 true
