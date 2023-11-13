@@ -96,7 +96,22 @@ namespace Component1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                string[] lines = textBox2.Lines;
+
+                foreach (string line in lines)
+                {
+                    commandParser.CheckSyntax(line.Split(' '));
+                    // commandParser.ExecuteCommand(line);
+                }
+                commandParser.SendMessage("Syntax is Valid");
+            }
+            catch (Exception ex)
+            {
+                // Report the exception
+                commandParser.SendMessage($"Error: {ex.Message}");
+            }
         }
 
         public void ClearPictureBox()
