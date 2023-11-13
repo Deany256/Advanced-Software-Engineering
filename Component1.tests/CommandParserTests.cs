@@ -5,9 +5,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Component1.tests
 {
+    /// <summary>
+    /// Test class for the CommandParser class, which parses and executes commands in a graphical form.
+    /// </summary>
     [TestClass]
     public class CommandParserTests
     {
+        /// <summary>
+        /// Tests the CheckSyntax method with a valid command, expecting no exceptions to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_ValidCommand_NoExceptionThrown()
         {
@@ -20,6 +26,9 @@ namespace Component1.tests
             Assert.IsFalse(ThrowsException<ArgumentException>(() => commandParser.CheckSyntax(validCommand)));
         }
 
+        /// <summary>
+        /// Tests the CheckSyntax method with an invalid command, expecting an ArgumentException to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_InvalidCommand_ThrowsException()
         {
@@ -32,6 +41,9 @@ namespace Component1.tests
             Assert.IsTrue(ThrowsException<ArgumentException>(() => commandParser.CheckSyntax(invalidCommand)));
         }
 
+        /// <summary>
+        /// Tests the CheckSyntax method with a valid "moveto" command, expecting no exceptions to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_ValidMovetoCommand_NoExceptionThrown()
         {
@@ -44,6 +56,9 @@ namespace Component1.tests
             Assert.IsFalse(ThrowsException<ArgumentException>(() => commandParser.CheckSyntax(validCommand)));
         }
 
+        /// <summary>
+        /// Tests the CheckSyntax method with an invalid "moveto" command, expecting an ArgumentException to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_InvalidMovetoCommand_ThrowsException()
         {
@@ -56,6 +71,9 @@ namespace Component1.tests
             Assert.IsTrue(ThrowsException<ArgumentException>(() => commandParser.CheckSyntax(invalidCommand)));
         }
 
+        /// <summary>
+        /// Tests the CheckSyntax method with a valid "drawcircle" command, expecting no exceptions to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_ValidDrawCircleCommand_NoExceptionThrown()
         {
@@ -68,6 +86,9 @@ namespace Component1.tests
             Assert.IsFalse(ThrowsException<ArgumentException>(() => commandParser.CheckSyntax(validCommand)));
         }
 
+        /// <summary>
+        /// Tests the CheckSyntax method with an invalid "drawcircle" command, expecting an ArgumentException to be thrown.
+        /// </summary>
         [TestMethod]
         public void CheckSyntax_InvalidDrawCircleCommand_ThrowsException()
         {
@@ -84,7 +105,9 @@ namespace Component1.tests
 
 
 
-
+        /// <summary>
+        /// Tests the ExecuteCommand method with a valid command, expecting no exceptions to be thrown.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_ValidCommand_NoExceptionThrown()
         {
@@ -97,6 +120,9 @@ namespace Component1.tests
             Assert.IsFalse(ThrowsException<ArgumentException>(() => commandParser.ExecuteCommand(validCommand)));
         }
 
+        /// <summary>
+        /// Tests the ExecuteCommand method with an invalid command, expecting an error message to be set in the form's label.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_InvalidCommand_SendsErrorMessage()
         {
@@ -112,6 +138,9 @@ namespace Component1.tests
             Assert.AreEqual("Error: Invalid command.", form.label1.Text);
         }
 
+        /// <summary>
+        /// Tests the ExecuteCommand method with a valid "moveto" command, expecting the coordinates to be updated.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_ValidMovetoCommand_UpdatesCoordinates()
         {
@@ -128,6 +157,9 @@ namespace Component1.tests
             Assert.AreEqual(20, commandParser.GetCurrentY());
         }
 
+        /// <summary>
+        /// Tests the ExecuteCommand method with a valid "setcolour" command, expecting the color to be set.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_ValidSetColourCommand_SetsColor()
         {
@@ -143,6 +175,9 @@ namespace Component1.tests
             Assert.AreEqual(Color.Red, commandParser.currentColor);
         }
 
+        /// <summary>
+        /// Tests the ExecuteCommand method with a valid "drawcircle" command, expecting no exceptions to be thrown.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_ValidDrawCircleCommand_DoesNotThrowException()
         {
@@ -155,6 +190,9 @@ namespace Component1.tests
             Assert.IsFalse(ThrowsException<ArgumentException>(() => commandParser.ExecuteCommand(validCommand)));
         }
 
+        /// <summary>
+        /// Tests the ExecuteCommand method with a valid "drawrectangle" command, expecting a rectangle to be drawn.
+        /// </summary>
         [TestMethod]
         public void ExecuteCommand_ValidDrawRectangleCommand_DrawsRectangle()
         {
@@ -171,10 +209,14 @@ namespace Component1.tests
         }
 
 
-
-
+        /// <summary>
+        /// test file for testing
+        /// </summary>
         private const string TestFileName = "TestFile.txt";
 
+        /// <summary>
+        /// Tests the SaveFile method with a valid file name and commands, expecting the file to be created.
+        /// </summary>
         [TestMethod]
         public void SaveFile_ValidFileNameAndCommands_FileIsCreated()
         {
@@ -193,6 +235,9 @@ namespace Component1.tests
             File.Delete(TestFileName);
         }
 
+        /// <summary>
+        /// Tests the OpenFile method with a valid file name and commands, expecting the commands to be executed.
+        /// </summary>
         [TestMethod]
         public void OpenFile_ValidFileNameAndCommands_CommandsAreExecuted()
         {
@@ -214,6 +259,9 @@ namespace Component1.tests
             File.Delete(TestFileName);
         }
 
+        /// <summary>
+        /// Tests the SaveFile method with an invalid file name, expecting an ArgumentException to be thrown.
+        /// </summary>
         [TestMethod]
         public void SaveFile_InvalidFileName_ThrowsException()
         {
@@ -226,6 +274,9 @@ namespace Component1.tests
             Assert.ThrowsException<ArgumentException>(() => commandParser.SaveFile(string.Empty, commands));
         }
 
+        /// <summary>
+        /// Tests the OpenFile method with a non-existent file, expecting a FileNotFoundException to be thrown.
+        /// </summary>
         [TestMethod]
         public void OpenFile_NonExistentFile_ThrowsException()
         {
@@ -250,6 +301,9 @@ namespace Component1.tests
             }
         }
 
+        /// <summary>
+        /// Tests the OpenFile method with an empty file, expecting no commands to be executed.
+        /// </summary>
         [TestMethod]
         public void OpenFile_EmptyFile_NoCommandsExecuted()
         {
@@ -270,6 +324,12 @@ namespace Component1.tests
             File.Delete(TestFileName);
         }
 
+        /// <summary>
+        /// Helper method to check if a specified action throws a specific exception type.
+        /// </summary>
+        /// <typeparam name="T">The type of exception expected.</typeparam>
+        /// <param name="action">The action to execute.</param>
+        /// <returns>True if the expected exception is thrown; otherwise, false.</returns>
         private bool ThrowsException<T>(Action action) where T : Exception
         {
             try
