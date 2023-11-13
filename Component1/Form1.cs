@@ -82,7 +82,11 @@ namespace Component1
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            // Draw the cursor at the current position within the bounds of the PictureBox
+            // int cursorDrawX = Math.Max(0, Math.Min(cursorX, pictureBox1.Width - 1));
+            // int cursorDrawY = Math.Max(0, Math.Min(cursorY, pictureBox1.Height - 1));
 
+            // DrawCursor(Graphics.FromImage(pictureBox1.Image), cursorDrawX, cursorDrawY);
         }
 
         private void DrawCursor(Graphics g, int X, int Y)
@@ -92,7 +96,7 @@ namespace Component1
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         public void ClearPictureBox()
