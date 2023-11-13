@@ -234,6 +234,17 @@ namespace Component1
 
                         case "load":
                             // load command
+                            if (commandArray.Length == 2)
+                            {
+                                string filename = $"{commandArray[1]}.txt";
+
+                                OpenFile(filename);
+                                // SaveFile(filename, formInstance.textBox2.Lines);
+                            }
+                            else
+                            {
+                                throw new ArgumentException("now drawing saved method");
+                            }
                             break;
 
                         case "setcolour":
