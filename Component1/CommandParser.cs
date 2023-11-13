@@ -19,7 +19,9 @@ namespace Component1
 
         public CommandParser(Form1 formInstance)
         {
-
+            this.formInstance = formInstance;
+            Reset();
+            currentColor = Color.Black; // Set initial color
         }
 
         public void Reset()
@@ -37,12 +39,72 @@ namespace Component1
 
         public void CheckSyntax(string[] commandArray)
         {
-           
+            if (commandArray.Length == 0)
+            {
+                throw new ArgumentException("empty command");
+            }
+
+            string command = commandArray[0];
+
+            // Add more checks for other valid commands and their required attributes
+            switch (command)
+            {
+                case "clear":
+                    if (commandArray.Length != 1)
+                    {
+                        throw new ArgumentException("Invalid syntax for 'clear' command.");
+                    }
+                    break;
+
+                case "reset":
+                    if (commandArray.Length != 1)
+                    {
+                        throw new ArgumentException("Invalid syntax for 'reset' command.");
+                    }
+                    break;
+
+                case "moveto":
+                    
+                    break;
+
+                case "drawto":
+                    
+                    break;
+
+                case "save":
+                    
+                    break;
+
+                case "load":
+                    
+                    break;
+
+                case "setcolour":
+                    
+                    break;
+
+                case "drawrectangle":
+                    
+                    break;
+
+                case "drawcircle":
+                    
+                    break;
+
+                case "drawtriangle":
+                    
+                    break;
+
+                // Add more cases for other commands
+
+                default:
+                    throw new ArgumentException("Invalid command.");
+            }
         }
 
         public void ExecuteCommand(string command)
         {
-           
+            
         }
 
         public int GetCurrentX()
