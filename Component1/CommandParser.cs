@@ -271,11 +271,23 @@ namespace Component1
                         // Add drawing logic here for other commands
                         case "drawrectangle":
                             // drawing logic for drawrectangle command
+                            if (lowerCaseCommandArray.Length == 4)
+                            {
+                                Rectangle rectangle = new Rectangle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), true);
+                                rectangle.Draw(g);  // GraphicsObject is assumed to be an instance of Graphics
 
+                            }
+                            else
+                            {
+                                Rectangle rectangle = new Rectangle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), false);
+                                rectangle.Draw(g);  // GraphicsObject is assumed to be an instance of Graphics
+                            }
+                            SendMessage("Rectangle drawn.");
                             break;
 
                         case "drawcircle":
                             // draw circle
+                            
                             break;
 
                         case "drawtriangle":
