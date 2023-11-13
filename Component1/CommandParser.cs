@@ -258,6 +258,8 @@ namespace Component1
                             else if (lowerCaseCommandArray.Length == 4)
                             {
                                 // Set color based on RGB values
+                                SetColorByRGB(int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), int.Parse(lowerCaseCommandArray[3]));
+                                SendMessage($"Color set to RGB({lowerCaseCommandArray[1]}, {lowerCaseCommandArray[2]}, {lowerCaseCommandArray[3]})");
                             }
                             else
                             {
