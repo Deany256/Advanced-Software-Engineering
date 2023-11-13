@@ -10,16 +10,31 @@ using System.Windows.Forms;
 
 namespace Component1
 {
+    /// <summary>
+    /// The main form for interacting with the drawing canvas and executing commands.
+    /// </summary>
     public partial class Form1 : Form
     {
         private CommandParser commandParser;
 
+        /// <summary>
+        /// Gets or sets the current command entered by the user.
+        /// </summary>
         public string CurrentCommand { get; set; }
 
+        /// <summary>
+        /// Gets or sets the X-coordinate for the cursor position.
+        /// </summary>
         public int x;
+
+        /// <summary>
+        /// Gets or sets the Y-coordinate for the cursor position.
+        /// </summary>
         public int y;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Form1"/> class.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -35,6 +50,9 @@ namespace Component1
             this.Paint += Form1_Paint;
         }
 
+        /// <summary>
+        /// Handles the click event for the first button, executing the entered command.
+        /// </summary>
         private void button1_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Image == null)
@@ -79,7 +97,10 @@ namespace Component1
             }
         }
 
-
+        /// <summary>
+        /// Handles the Paint event of the form, drawing the cursor on the canvas.
+        /// Except it doesn't really work
+        /// </summary>
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             // Draw the cursor at the current position within the bounds of the PictureBox
@@ -89,11 +110,20 @@ namespace Component1
             // DrawCursor(Graphics.FromImage(pictureBox1.Image), cursorDrawX, cursorDrawY);
         }
 
+        /// <summary>
+        /// Draws the cursor on the graphics surface at the specified position.
+        /// </summary>
+        /// <param name="g">The graphics surface on which to draw the cursor.</param>
+        /// <param name="X">The X-coordinate of the cursor position.</param>
+        /// <param name="Y">The Y-coordinate of the cursor position.</param>
         private void DrawCursor(Graphics g, int X, int Y)
         {
             g.DrawEllipse(Pens.Red, X - 5, Y - 5, 10, 10);
         }
 
+        /// <summary>
+        /// Handles the click event for the second button, checking the syntax of entered commands.
+        /// </summary>
         private void button2_Click(object sender, EventArgs e)
         {
             try
@@ -114,6 +144,9 @@ namespace Component1
             }
         }
 
+        /// <summary>
+        /// Clears the picture box.
+        /// </summary>
         public void ClearPictureBox()
         {
             pictureBox1.Image = null;
