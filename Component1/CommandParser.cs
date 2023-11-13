@@ -63,12 +63,31 @@ namespace Component1
 
         private void SetColorByPreset(string presetColor)
         {
-            
+            // Add more preset color checks as needed
+            switch (presetColor.ToLower())
+            {
+                case "red":
+                    currentColor = Color.Red;
+                    break;
+                case "blue":
+                    currentColor = Color.Blue;
+                    break;
+                case "green":
+                    currentColor = Color.Green;
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid preset color: {presetColor}");
+            }
         }
 
         private void SetColorByRGB(int r, int g, int b)
         {
-            
+            // Validate RGB values if needed
+            if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+            {
+                throw new ArgumentException("Invalid RGB values.");
+            }
+            currentColor = Color.FromArgb(r, g, b);
         }
         // Add methods for saving and loading a program to a text file
 
