@@ -64,23 +64,57 @@ namespace Component1
                     break;
 
                 case "moveto":
-                    
+                    if (commandArray.Length != 3 || !int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _))
+                    {
+                        throw new ArgumentException("Invalid syntax for 'moveto' command.");
+                    }
                     break;
 
                 case "drawto":
-                    
+                    if (commandArray.Length != 3 || !int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _))
+                    {
+                        throw new ArgumentException("Invalid syntax for 'drawto' command.");
+                    }
                     break;
 
                 case "save":
-                    
+                    if (commandArray.Length != 2)
+                    {
+                        throw new ArgumentException("Enter save name");
+                    }
                     break;
 
                 case "load":
-                    
+                    if (commandArray.Length != 2)
+                    {
+                        throw new ArgumentException("Enter save name");
+                    }
                     break;
 
                 case "setcolour":
-                    
+                    // 'setcolour' command can take either a preset color or RGB values
+                    if (commandArray.Length != 2 && commandArray.Length != 4)
+                    {
+                        throw new ArgumentException("Invalid syntax for 'setcolour' command.");
+                    }
+
+                    // Check for preset color
+                    if (commandArray.Length == 2)
+                    {
+                        // Add more preset color checks as needed
+                        string presetColor = commandArray[1].ToLower();
+                        if (presetColor != "red" && presetColor != "blue" && presetColor != "green")
+                        {
+                            throw new ArgumentException("Invalid preset color for 'setcolour' command.");
+                        }
+                    }
+                    else // Check for RGB values
+                    {
+                        if (!int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _) || !int.TryParse(commandArray[3], out _))
+                        {
+                            throw new ArgumentException("Invalid RGB values for 'setcolour' command.");
+                        }
+                    }
                     break;
 
                 case "drawrectangle":
