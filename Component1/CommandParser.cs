@@ -375,13 +375,6 @@ namespace Component1
             }
             currentColor = Color.FromArgb(r, g, b);
         }
-        // Add methods for saving and loading a program to a text file
-
-        // Add methods for syntax checking (checking for valid commands and parameters)
-
-        // ... rest of the class remains the same ...
-
-        public static void FormatCode() { }
 
         public void OpenFile(string save) 
         {
