@@ -137,7 +137,12 @@ namespace Component1
                     break;
 
                 case "drawtriangle":
-                    
+                    if (commandArray.Length != 2 && commandArray.Length != 3
+                        || !int.TryParse(commandArray[1], out _)
+                        || (commandArray.Length == 3 && !bool.TryParse(commandArray[2], out _)))
+                    {
+                        throw new ArgumentException("Invalid syntax for 'DrawTriangle' command.");
+                    }
                     break;
 
                 // Add more cases for other commands
