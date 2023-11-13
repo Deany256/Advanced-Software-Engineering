@@ -22,17 +22,7 @@ namespace Component1
         
         public Form1()
         {
-            InitializeComponent();
-            commandParser = new CommandParser(this);
-            label1.Text = "Confirmation of Actions or Errors will appear here";
-
-            if (pictureBox1.Image == null)
-            {
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            }
-
-            // Subscribe to the Paint event
-            this.Paint += Form1_Paint;
+           
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,48 +35,13 @@ namespace Component1
             var g = Graphics.FromImage(pictureBox1.Image);
 
 
-            if (textBox2.Text == "" && textBox1.Text == "")
-            {
-                commandParser.SendMessage("No commands detected.");
-            }
-            else if (textBox1.Text != "" && textBox2.Text != "")
-            {
-                string[] commandArray = textBox1.Text.Split(' ');
-                if (commandArray[0] == "save")
-                {
-                    commandParser.ExecuteCommand(textBox1.Text);
-                }
-            }
-            else if (textBox1.Text != "")
-            {
-                string command = textBox1.Text;
-                commandParser.ExecuteCommand(command);
-
-                // Clear the TextBox
-                textBox1.Clear();
-            } 
-            else if (textBox2.Text != "")
-            {
-                string[] lines = textBox2.Lines;
-
-                foreach (string line in lines)
-                {
-                    commandParser.ExecuteCommand(line);
-                }
-
-                // Clear the TextBox
-                textBox2.Clear();
-            }
+            
         }
 
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            // Draw the cursor at the current position within the bounds of the PictureBox
-            // int cursorDrawX = Math.Max(0, Math.Min(cursorX, pictureBox1.Width - 1));
-            //int cursorDrawY = Math.Max(0, Math.Min(cursorY, pictureBox1.Height - 1));
 
-            // DrawCursor(Graphics.FromImage(pictureBox1.Image), cursorDrawX, cursorDrawY);
         }
 
         private void DrawCursor(Graphics g, int X, int Y)
@@ -96,27 +51,12 @@ namespace Component1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string[] lines = textBox2.Lines;
-
-                foreach (string line in lines)
-                {
-                    commandParser.CheckSyntax(line.Split(' '));
-                    // commandParser.ExecuteCommand(line);
-                }
-                commandParser.SendMessage("Syntax is Valid");
-            }
-            catch (Exception ex)
-            {
-                // Report the exception
-                commandParser.SendMessage($"Error: {ex.Message}");
-            }
+           
         }
 
         public void ClearPictureBox()
         {
-            pictureBox1.Image = null;
+           
 
         }
     }
