@@ -446,6 +446,10 @@ namespace Component1
                     }
                 }
             }
+            else
+            {
+                throw new FileNotFoundException($"File not found: {save}", save);
+            }
         }
 
 
