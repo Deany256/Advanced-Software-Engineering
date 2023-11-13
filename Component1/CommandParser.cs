@@ -178,6 +178,8 @@ namespace Component1
 
                         case "reset":
                             // Reset command
+                            Reset();
+                            SendMessage("Coordinates reset to the center.");
                             break;
 
                         case "moveto":
