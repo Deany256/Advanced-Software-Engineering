@@ -166,6 +166,62 @@ namespace Component1
 
                 CheckSyntax(lowerCaseCommandArray);
 
+                if (lowerCaseCommandArray.Length > 0)
+                {
+                    switch (lowerCaseCommandArray[0])
+                    {
+                        case "clear":
+                            // clear command
+                            break;
+
+                        case "reset":
+                            // Reset command
+                            break;
+
+                        case "moveto":
+                            // moveto command
+                            break;
+
+                        case "drawto":
+                            // drawto commands
+                            break;
+
+                        case "save":
+                            // save command
+                            break;
+
+                        case "load":
+                            // load command
+                            break;
+
+                        case "setcolour":
+                            // setcolour logic
+                            
+                            break;
+
+                        
+                        // Add drawing logic here for other commands
+                        case "drawrectangle":
+                            // drawing logic for drawrectangle command
+
+                            break;
+
+                        case "drawcircle":
+                            // draw circle
+                            break;
+
+                        case "drawtriangle":
+                            // draw triangle
+                            break;
+
+                        default:
+                            throw new ArgumentException("Invalid command.");
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Empty command.");
+                }
             }
             catch (Exception ex)
             {
