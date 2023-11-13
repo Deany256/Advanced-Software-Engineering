@@ -184,6 +184,16 @@ namespace Component1
 
                         case "moveto":
                             // moveto command
+                            if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int movetoX) && int.TryParse(lowerCaseCommandArray[2], out int movetoY))
+                            {
+                                currentX = movetoX;
+                                currentY = movetoY;
+                                SendMessage($"Moved to X: {currentX}, Y: {currentY}");
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid parameters for 'moveto' command.");
+                            }
                             break;
 
                         case "drawto":
