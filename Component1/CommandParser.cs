@@ -118,7 +118,13 @@ namespace Component1
                     break;
 
                 case "drawrectangle":
-                    
+                    if (commandArray.Length != 3 && commandArray.Length != 4
+                        || !int.TryParse(commandArray[1], out _)
+                        || !int.TryParse(commandArray[2], out _)
+                        || (commandArray.Length == 4 && !bool.TryParse(commandArray[3], out _)))
+                    {
+                        throw new ArgumentException("Invalid syntax for 'DrawRectangle' command.");
+                    }
                     break;
 
                 case "drawcircle":
