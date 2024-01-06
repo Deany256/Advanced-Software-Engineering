@@ -10,6 +10,26 @@ using System.IO;
 
 namespace Component1
 {
+    public struct Variablestorage
+    {
+        // Public fields for string and int
+        public string Text;
+        public int Number;
+
+        // Constructor to initialize the struct
+        public Variablestorage(string variableName, int variableValue)
+        {
+            Text = variableName;
+            Number = variableValue;
+        }
+
+        // Method to return a value tuple with string and int values
+        public (string Text, int Number) DisplayValues()
+        {
+            return (Text, Number);
+        }
+    }
+
     /// <summary>
     /// Parses and executes commands for drawing shapes and interacting with a drawing canvas.
     /// </summary>
@@ -166,6 +186,13 @@ namespace Component1
 
                 // Add more cases for other commands
 
+                case "var":
+                    if (commandArray.Length != 3 || !int.TryParse(commandArray[2], out _))
+                    {
+                        throw new ArgumentException("Invalid syntax for 'var' command.");
+                    }
+                    break;
+
                 default:
                     throw new ArgumentException("Invalid command.");
             }
@@ -188,7 +215,12 @@ namespace Component1
                 // Convert the commandArray to lowercase for case-insensitive comparison
                 string[] lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
 
+                // Create a list of StringIntPair structs
+                List<Variablestorage> variable = new List<Variablestorage>();
+
                 CheckSyntax(lowerCaseCommandArray);
+
+                
 
                 if (lowerCaseCommandArray.Length > 0)
                 {
@@ -337,6 +369,16 @@ namespace Component1
                                 triangle.Draw(g);
                             }
                             SendMessage("Triangle drawn.");
+                            break;
+
+                        case "var":
+                            if (lowerCaseCommandArray.Length == 3)
+                            {
+                                String variableName = lowerCaseCommandArray[1];
+                                int variableValue = int.Parse(lowerCaseCommandArray[2]);
+                                variable.Add(new Variablestorage(variableName, variableValue));
+                            }
+                            SendMessage("valid variable");
                             break;
 
                         default:
