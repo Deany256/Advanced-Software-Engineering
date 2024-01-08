@@ -134,6 +134,16 @@ namespace Component1
             }
         }
 
+        private void ValidateDrawTriangleSyntax(string[] commandArray)
+        {
+            if (commandArray.Length != 3 && commandArray.Length != 4
+                || !int.TryParse(commandArray[1], out _)
+                || (commandArray.Length == 4 && !bool.TryParse(commandArray[3], out _)))
+            {
+                throw new ArgumentException("Invalid syntax for 'drawtriangle' command.");
+            }
+        }
+
         /// <summary>
         /// Checks the syntax of the provided command array.
         /// Acts like a gate keeper
