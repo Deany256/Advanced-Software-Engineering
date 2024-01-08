@@ -39,6 +39,12 @@ namespace Component1
         private int currentX;
         private int currentY;
         public Color currentColor { get; private set; } // Store the current color
+        public List<Variablestorage> variable = new List<Variablestorage>();
+        public string commands;
+
+        private bool isRecordingCommands = false;
+        private bool isvalidif;
+        private List<string> recordedCommands = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandParser"/> class.
@@ -49,7 +55,7 @@ namespace Component1
         {
             this.formInstance = formInstance;
             Reset();
-            currentColor = Color.Black; // Set initial color
+            currentColor = Color.Black; // Set initial colour
         }
 
         /// <summary>
@@ -71,11 +77,18 @@ namespace Component1
 
         }
 
+        public void commandlist()
+        {
+            commands = formInstance.textBox2.Text;
+        }
+
         private bool ContainsOperator(string condition)
         {
-            // Check if the condition contains any of the specified operators
-            return condition.Contains("=") || condition.Contains("<") || condition.Contains(">")
-                || condition.Contains("<=") || condition.Contains(">=");
+            // List of valid operators
+            string[] validOperators = { "=", "<", ">", "<=", ">=" };
+
+            // Check if the given operatorString is in the list of valid operators
+            return validOperators.Contains(condition);
         }
 
         private void ValidateSingleCommandSyntax(string[] commandArray, int expectedLength)
@@ -165,6 +178,7 @@ namespace Component1
             {
                 throw new ArgumentException("Invalid syntax for 'if' command.");
             }
+
         }
 
         /// <summary>
@@ -227,6 +241,10 @@ namespace Component1
                     ValidateIfSyntax(commandArray);
                     break;
 
+                case "endif":
+                    ValidateSingleCommandSyntax(commandArray,1);
+                    break;
+
                 default:
                     throw new ArgumentException("Invalid command.");
             }
@@ -262,10 +280,48 @@ namespace Component1
                 lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
 
                 // Create a list of StringIntPair structs
-                List<Variablestorage> variable = new List<Variablestorage>();
+                // List<Variablestorage> variable = new List<Variablestorage>();
+
+                
 
                 CheckSyntax(lowerCaseCommandArray);
 
+                /*if (isRecordingCommands)
+                {
+                    // Record the command
+                    recordedCommands.Add(command);
+
+                    // Check for "endif" keyword to stop recording
+                    if (lowerCaseCommandArray.Length > 0 && lowerCaseCommandArray[0] == "endif")
+                    {
+                        isRecordingCommands = false;
+
+                        // Execute the recorded commands if the condition is met
+                        if (EvaluateCondition())
+                        {
+                            foreach (var recordedCommand in recordedCommands)
+                            {
+                                ExecuteSingleCommand(recordedCommand);
+                            }
+                        }
+
+                        // Clear the recorded commands for the next "if" block
+                        recordedCommands.Clear();
+                    }
+                    else
+                    {
+                        // Check for "if" keyword to start recording
+                        if (lowerCaseCommandArray.Length > 0 && lowerCaseCommandArray[0] == "if")
+                        {
+                            isRecordingCommands = true;
+                        }
+                        else
+                        {
+                            // Execute the command
+                            ExecuteSingleCommand(command);
+                        }
+                    }
+                }*/
                 
 
                 if (lowerCaseCommandArray.Length > 0)
@@ -274,49 +330,77 @@ namespace Component1
                     {
                         case "clear":
                             // clear command
-                            ClearPictureBox();
-                            SendMessage("Canvas has been cleared.");
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
+                                ClearPictureBox();
+                                SendMessage("Canvas has been cleared.");
+                            }
                             break;
 
                         case "reset":
                             // Reset command
-                            Reset();
-                            SendMessage("Coordinates reset to the center.");
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
+                                Reset();
+                                SendMessage("Coordinates reset to the center.");
+                            }
                             break;
 
                         case "moveto":
                             // moveto command
-                            if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int movetoX) && int.TryParse(lowerCaseCommandArray[2], out int movetoY))
+                            if (isRecordingCommands)
                             {
-                                currentX = movetoX;
-                                currentY = movetoY;
-                                SendMessage($"Moved to X: {currentX}, Y: {currentY}");
+                                recordedCommands.Add(command);
                             }
                             else
                             {
-                                throw new ArgumentException("Invalid parameters for 'moveto' command.");
+                                if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int movetoX) && int.TryParse(lowerCaseCommandArray[2], out int movetoY))
+                                {
+                                    currentX = movetoX;
+                                    currentY = movetoY;
+                                    SendMessage($"Moved to X: {currentX}, Y: {currentY}");
+                                }
+                                else
+                                {
+                                    throw new ArgumentException("Invalid parameters for 'moveto' command.");
+                                }
                             }
                             break;
 
                         case "drawto":
                             // drawto commands
-                            if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int drawtoX) && int.TryParse(lowerCaseCommandArray[2], out int drawtoY))
+                            if (isRecordingCommands)
                             {
-                                // Create an instance of Pen
-                                Pen pen = new Pen(currentColor);
-
-                                // Draw a line from the current position to the specified end point
-                                formInstance.pictureBox1.CreateGraphics().DrawLine(pen, currentX, currentY, drawtoX, drawtoY);
-
-                                // Update the current position
-                                currentX = drawtoX;
-                                currentY = drawtoY;
-
-                                SendMessage($"Line drawn to X: {drawtoX}, Y: {drawtoY}");
+                                recordedCommands.Add(command);
                             }
                             else
                             {
-                                throw new ArgumentException("Invalid parameters for 'drawto' command.");
+                                if (lowerCaseCommandArray.Length == 3 && int.TryParse(lowerCaseCommandArray[1], out int drawtoX) && int.TryParse(lowerCaseCommandArray[2], out int drawtoY))
+                                {
+                                    // Create an instance of Pen
+                                    Pen pen = new Pen(currentColor);
+
+                                    // Draw a line from the current position to the specified end point
+                                    formInstance.pictureBox1.CreateGraphics().DrawLine(pen, currentX, currentY, drawtoX, drawtoY);
+
+                                    // Update the current position
+                                    currentX = drawtoX;
+                                    currentY = drawtoY;
+
+                                    SendMessage($"Line drawn to X: {drawtoX}, Y: {drawtoY}");
+                                }
+                                else
+                                {
+                                    throw new ArgumentException("Invalid parameters for 'drawto' command.");
+                                }
                             }
                             break;
 
@@ -350,29 +434,43 @@ namespace Component1
                             break;
 
                         case "setcolour":
-                            // setcolour logic
-                            if (lowerCaseCommandArray.Length == 2)
+                            if (isRecordingCommands)
                             {
-                                // Set color based on preset color
-                                SetColorByPreset(lowerCaseCommandArray[1]);
-                                SendMessage($"Color set to {lowerCaseCommandArray[1]}");
-                            }
-                            else if (lowerCaseCommandArray.Length == 4)
-                            {
-                                // Set color based on RGB values
-                                SetColorByRGB(int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), int.Parse(lowerCaseCommandArray[3]));
-                                SendMessage($"Color set to RGB({lowerCaseCommandArray[1]}, {lowerCaseCommandArray[2]}, {lowerCaseCommandArray[3]})");
+                                recordedCommands.Add(command);
                             }
                             else
                             {
-                                throw new ArgumentException("Invalid parameters for 'setcolour' command.");
+                                if (lowerCaseCommandArray.Length == 2)
+                                {
+                                    // Set color based on preset color
+                                    SetColorByPreset(lowerCaseCommandArray[1]);
+                                    SendMessage($"Color set to {lowerCaseCommandArray[1]}");
+                                }
+                                else if (lowerCaseCommandArray.Length == 4)
+                                {
+                                    // Set color based on RGB values
+                                    SetColorByRGB(int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), int.Parse(lowerCaseCommandArray[3]));
+                                    SendMessage($"Color set to RGB({lowerCaseCommandArray[1]}, {lowerCaseCommandArray[2]}, {lowerCaseCommandArray[3]})");
+                                }
+                                else
+                                {
+                                    throw new ArgumentException("Invalid parameters for 'setcolour' command.");
+                                }
                             }
+                            // setcolour logic
+
                             break;
 
                         
                         // Add drawing logic here for other commands
                         case "drawrectangle":
                             // drawing logic for drawrectangle command
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
                             if (lowerCaseCommandArray.Length == 4)
                             {
                                 Rectangle rectangle = new Rectangle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), int.Parse(lowerCaseCommandArray[2]), true);
@@ -385,10 +483,18 @@ namespace Component1
                                 rectangle.Draw(g);  // GraphicsObject is assumed to be an instance of Graphics
                             }
                             SendMessage("Rectangle drawn.");
+                            }
+
                             break;
 
                         case "drawcircle":
                             // draw circle
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
                             if (lowerCaseCommandArray.Length == 3)
                             {
                                 Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), true);
@@ -400,10 +506,18 @@ namespace Component1
                                 circle.Draw(g);
                             }
                             SendMessage("Circle drawn.");
+                            }
+
                             break;
 
                         case "drawtriangle":
                             // draw triangle
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
                             if (lowerCaseCommandArray.Length == 3)
                             {
                                 Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), true);
@@ -415,9 +529,18 @@ namespace Component1
                                 triangle.Draw(g);
                             }
                             SendMessage("Triangle drawn.");
+                            }
+
                             break;
 
                         case "var":
+                            // declare variable
+                            if (isRecordingCommands)
+                            {
+                                recordedCommands.Add(command);
+                            }
+                            else
+                            {
                             if (lowerCaseCommandArray.Length == 3)
                             {
                                 String variableName = lowerCaseCommandArray[1];
@@ -425,10 +548,71 @@ namespace Component1
                                 variable.Add(new Variablestorage(variableName, variableValue));
                             }
                             SendMessage("valid variable");
+                            }
+
                             break;
 
                         case "if":
+                            // declare if statement
+                            isRecordingCommands = true;
+                            if (lowerCaseCommandArray[2] == "=")
+                            {
+                                if (variable.Any(item => item.Text == lowerCaseCommandArray[1]))
+                                {
+                                    if (int.TryParse(commandArray[3], out int number))
+                                    {
+                                        SendMessage("variable 1 exist and = used and second item is a number");
+                                        Variablestorage foundvariable = variable.FirstOrDefault(item => item.Text == commandArray[1]);
+                                        if (foundvariable.Number == number)
+                                        {
+                                            isvalidif= true;
+                                            SendMessage("end of if");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        SendMessage("variable 1 exist and = used and second item is a variable");
+                                    }
+                                }
+                                else
+                                {
+                                    SendMessage("no variable by that name");
+                                }
+                                
+                            }
+                            else if (lowerCaseCommandArray[2] == "<")
+                            {
+                                SendMessage("< used");
+                            }
+                            else if (lowerCaseCommandArray[2] == ">")
+                            {
+                                SendMessage("> used");
+                            }
+                            else if (lowerCaseCommandArray[2] == "<=")
+                            {
+                                SendMessage("<= used");
+                            }
+                            else if (lowerCaseCommandArray[2] == ">=")
+                            {
+                                SendMessage(">= used");
+                            }
+                            else
+                            {
+                                SendMessage("Valid if statement");
+                            }
 
+                            break;
+
+                        case "endif":
+                            isRecordingCommands = false;
+                            if (isvalidif)
+                            {
+                                foreach (string line in recordedCommands)
+                                {
+                                    ExecuteCommand(line);
+                                }
+                            }
+                            recordedCommands.Clear();
                             break;
 
                         default:
@@ -456,6 +640,7 @@ namespace Component1
             }
         }
 
+        
         /// <summary>
         /// Gets the current X-coordinate.
         /// </summary>

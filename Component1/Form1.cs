@@ -62,6 +62,7 @@ namespace Component1
 
             var g = Graphics.FromImage(pictureBox1.Image);
 
+            commandParser.variable.Clear();
 
             if (textBox2.Text == "" && textBox1.Text == "")
             {
@@ -86,14 +87,14 @@ namespace Component1
             else if (textBox2.Text != "")
             {
                 string[] lines = textBox2.Lines;
-
+                
                 foreach (string line in lines)
                 {
                     commandParser.ExecuteCommand(line);
                 }
 
                 // Clear the TextBox
-                textBox2.Clear();
+                // textBox2.Clear();
             }
         }
 
