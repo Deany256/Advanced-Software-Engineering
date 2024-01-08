@@ -330,7 +330,7 @@ namespace Component1
                     {
                         case "clear":
                             // clear command
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -343,7 +343,7 @@ namespace Component1
 
                         case "reset":
                             // Reset command
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -356,7 +356,7 @@ namespace Component1
 
                         case "moveto":
                             // moveto command
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -377,7 +377,7 @@ namespace Component1
 
                         case "drawto":
                             // drawto commands
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -434,7 +434,7 @@ namespace Component1
                             break;
 
                         case "setcolour":
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -465,7 +465,7 @@ namespace Component1
                         // Add drawing logic here for other commands
                         case "drawrectangle":
                             // drawing logic for drawrectangle command
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
@@ -489,45 +489,45 @@ namespace Component1
 
                         case "drawcircle":
                             // draw circle
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
                             else
                             {
-                            if (lowerCaseCommandArray.Length == 3)
-                            {
-                                Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), true);
-                                circle.Draw(g);
-                            }
-                            else
-                            {
-                                Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), false);
-                                circle.Draw(g);
-                            }
-                            SendMessage("Circle drawn.");
+                                if (lowerCaseCommandArray.Length == 3)
+                                {
+                                    Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), true);
+                                    circle.Draw(g);
+                                }
+                                else
+                                {
+                                    Circle circle = new Circle(currentColor, currentX, currentY, int.Parse(lowerCaseCommandArray[1]), false);
+                                    circle.Draw(g);
+                                }
+                                SendMessage("Circle drawn.");
                             }
 
                             break;
 
                         case "drawtriangle":
                             // draw triangle
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
                             else
                             {
-                            if (lowerCaseCommandArray.Length == 3)
-                            {
-                                Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), true);
-                                triangle.Draw(g);
-                            }
-                            else
-                            {
-                                Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), false);
-                                triangle.Draw(g);
-                            }
+                                if (lowerCaseCommandArray.Length == 3)
+                                {
+                                    Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), true);
+                                    triangle.Draw(g);
+                                }
+                                else
+                                {
+                                    Triangle triangle = new Triangle(currentColor, currentX, currentY, int.Parse((lowerCaseCommandArray[1])), false);
+                                    triangle.Draw(g);
+                                }
                             SendMessage("Triangle drawn.");
                             }
 
@@ -535,12 +535,11 @@ namespace Component1
 
                         case "var":
                             // declare variable
-                            if (isRecordingCommands)
+                            if (isRecordingCommands || isvalidif)
                             {
                                 recordedCommands.Add(command);
                             }
-                            else
-                            {
+
                             if (lowerCaseCommandArray.Length == 3)
                             {
                                 String variableName = lowerCaseCommandArray[1];
@@ -548,57 +547,58 @@ namespace Component1
                                 variable.Add(new Variablestorage(variableName, variableValue));
                             }
                             SendMessage("valid variable");
-                            }
+                            
 
                             break;
 
                         case "if":
                             // declare if statement
                             isRecordingCommands = true;
-                            if (lowerCaseCommandArray[2] == "=")
+                            if (variable.Any(item => item.Text == lowerCaseCommandArray[1]))
                             {
-                                if (variable.Any(item => item.Text == lowerCaseCommandArray[1]))
+                                if (int.TryParse(commandArray[3], out int number))
                                 {
-                                    if (int.TryParse(commandArray[3], out int number))
+                                    SendMessage("variable 1 exist and = used and second item is a number");
+                                    Variablestorage foundvariable = variable.FirstOrDefault(item => item.Text == commandArray[1]);
+                                    if (commandArray[2] == "=" && foundvariable.Number == number)
                                     {
-                                        SendMessage("variable 1 exist and = used and second item is a number");
-                                        Variablestorage foundvariable = variable.FirstOrDefault(item => item.Text == commandArray[1]);
-                                        if (foundvariable.Number == number)
-                                        {
-                                            isvalidif= true;
-                                            SendMessage("end of if");
-                                        }
+                                        isvalidif = true;
+                                        SendMessage("end of if");
+                                    }
+                                    else if (commandArray[2] == "<" && foundvariable.Number < number)
+                                    {
+                                        isvalidif = true;
+                                        SendMessage("End of if (Number is less than the comparison value)");
+                                    }
+                                    else if (commandArray[2] == ">" && foundvariable.Number > number)
+                                    {
+                                        isvalidif = true;
+                                        SendMessage("End of if (Number is greater than the comparison value)");
+                                    }
+                                    else if (commandArray[2] == "<=" && foundvariable.Number <= number)
+                                    {
+                                        isvalidif = true;
+                                        SendMessage("End of if (Number is less than or equal to the comparison value)");
+                                    }
+                                    else if (commandArray[2] == ">=" && foundvariable.Number >= number)
+                                    {
+                                        isvalidif = true;
+                                        SendMessage("End of if (Number is greater than or equal to the comparison value)");
                                     }
                                     else
                                     {
-                                        SendMessage("variable 1 exist and = used and second item is a variable");
+                                        /*isRecordingCommands = false;*/
+                                        SendMessage("End of if (Invalid comparison)");
                                     }
                                 }
                                 else
                                 {
-                                    SendMessage("no variable by that name");
+                                    SendMessage("variable 1 exist and = used and second item is a variable");
                                 }
-                                
-                            }
-                            else if (lowerCaseCommandArray[2] == "<")
-                            {
-                                SendMessage("< used");
-                            }
-                            else if (lowerCaseCommandArray[2] == ">")
-                            {
-                                SendMessage("> used");
-                            }
-                            else if (lowerCaseCommandArray[2] == "<=")
-                            {
-                                SendMessage("<= used");
-                            }
-                            else if (lowerCaseCommandArray[2] == ">=")
-                            {
-                                SendMessage(">= used");
                             }
                             else
                             {
-                                SendMessage("Valid if statement");
+                                SendMessage("no variable by that name");
                             }
 
                             break;
@@ -607,11 +607,13 @@ namespace Component1
                             isRecordingCommands = false;
                             if (isvalidif)
                             {
+                                isvalidif = false;
                                 foreach (string line in recordedCommands)
                                 {
                                     ExecuteCommand(line);
                                 }
                             }
+                            isvalidif = false;
                             recordedCommands.Clear();
                             break;
 
