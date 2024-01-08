@@ -90,7 +90,28 @@ namespace Component1
             }
         }
 
-        
+        private void ValidateSetColourSyntax(string[] commandArray)
+        {
+            if (commandArray.Length != 2 && commandArray.Length != 4)
+            {
+                throw new ArgumentException("Invalid syntax for 'setcolour' command.");
+            }
+
+            if (commandArray.Length == 2)
+            {
+                // Check preset color
+                string presetColor = commandArray[1].ToLower();
+                if (presetColor != "red" && presetColor != "blue" && presetColor != "green")
+                {
+                    throw new ArgumentException("Invalid preset color for 'setcolour' command.");
+                }
+            }
+            else
+            {
+                // Check RGB values
+                ValidateIntParameters(commandArray, 1, 2, 3);
+            }
+        }
 
         /// <summary>
         /// Checks the syntax of the provided command array.
