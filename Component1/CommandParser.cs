@@ -144,6 +144,14 @@ namespace Component1
             }
         }
 
+        private void ValidateVariableSyntax(string[] commandArray)
+        {
+            if (commandArray.Length != 3 || !int.TryParse(commandArray[2], out _))
+            {
+                throw new ArgumentException("Invalid syntax for 'var' command.");
+            }
+        }
+
         /// <summary>
         /// Checks the syntax of the provided command array.
         /// Acts like a gate keeper
