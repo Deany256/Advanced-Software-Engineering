@@ -46,6 +46,8 @@ namespace Component1
         private bool isvalidif;
         private List<string> recordedCommands = new List<string>();
 
+        public List<string> OperatorList = new List<string> { "+", "-", "*", "/" };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CommandParser"/> class.
         /// </summary>
@@ -157,7 +159,7 @@ namespace Component1
         private void ValidateDrawTriangleSyntax(string[] commandArray)
         {
             if (commandArray.Length != 3 && commandArray.Length != 4
-                || !int.TryParse(commandArray[1], out _)
+                || !int.TryParse(commandArray.Last(), out _)
                 || (commandArray.Length == 4 && !bool.TryParse(commandArray[3], out _)))
             {
                 throw new ArgumentException("Invalid syntax for 'drawtriangle' command.");
@@ -166,9 +168,14 @@ namespace Component1
 
         private void ValidateVariableSyntax(string[] commandArray)
         {
-            if (commandArray.Length != 3 || !int.TryParse(commandArray[2], out _))
+            if (commandArray.Length != 3 && commandArray.Length != 4 
+                || !int.TryParse(commandArray.Last(), out _))
             {
                 throw new ArgumentException("Invalid syntax for 'var' command.");
+            } 
+            else if ((commandArray.Length == 4 && commandArray.Any(op => OperatorList.Contains(op)) == false))
+            {
+                throw new ArgumentException("testing the syntax for 'var' command.");
             }
         }
 
@@ -494,13 +501,40 @@ namespace Component1
                                 recordedCommands.Add(command);
                             }
 
+                            String variableName = null;
+                            int variableValue = 0;
+
                             if (lowerCaseCommandArray.Length == 3)
                             {
-                                String variableName = lowerCaseCommandArray[1];
-                                int variableValue = int.Parse(lowerCaseCommandArray[2]);
+                                variableName = lowerCaseCommandArray[1];
+                                variableValue = int.Parse(lowerCaseCommandArray[2]);
                                 variable.Add(new Variablestorage(variableName, variableValue));
                             }
-                            SendMessage("valid variable");
+                            if (lowerCaseCommandArray.Length == 4)
+                            {
+                                Variablestorage variablename = variable.Find(v=>v.Text == lowerCaseCommandArray[1]);
+                                variableValue = int.Parse(lowerCaseCommandArray[3]);
+                                if (lowerCaseCommandArray[2] == "+")
+                                {
+                                    variablename.Number = variablename.Number + variableValue;
+                                    SendMessage($"Successfully added to make {variablename.Number}");
+                                }
+                                else if (lowerCaseCommandArray[2] == "-")
+                                {
+                                    variablename.Number = variablename.Number - variableValue;
+                                    SendMessage($"Successfully subtracted to make {variablename.Number}");
+                                }
+                                else if (lowerCaseCommandArray[2] == "*")
+                                {
+                                    variablename.Number = variablename.Number * variableValue;
+                                    SendMessage($"Successfully multiplied to make {variablename.Number}");
+                                }
+                                else if (lowerCaseCommandArray[2] == "/")
+                                {
+                                    variablename.Number = variablename.Number / variableValue;
+                                    SendMessage($"Successfully divided to make {variablename.Number}");
+                                }
+                            }
                             
 
                             break;
@@ -541,7 +575,6 @@ namespace Component1
                                     }
                                     else
                                     {
-                                        /*isRecordingCommands = false;*/
                                         SendMessage("End of if (Invalid comparison)");
                                     }
                                 }
@@ -570,6 +603,14 @@ namespace Component1
                             isvalidif = false;
                             recordedCommands.Clear();
                             break;
+
+                        case "loop":
+                            break;
+
+                        case "endloop":
+                            break;
+
+
 
                         default:
                             // check if first string is a variable name
