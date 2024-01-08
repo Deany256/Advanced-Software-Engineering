@@ -273,56 +273,10 @@ namespace Component1
                     lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
                 }
 
-                // Split the command into an array of strings
-                // string[] commandArray = command.Split(' ');
-
                 // Convert the commandArray to lowercase for case-insensitive comparison
                 lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
 
-                // Create a list of StringIntPair structs
-                // List<Variablestorage> variable = new List<Variablestorage>();
-
-                
-
                 CheckSyntax(lowerCaseCommandArray);
-
-                /*if (isRecordingCommands)
-                {
-                    // Record the command
-                    recordedCommands.Add(command);
-
-                    // Check for "endif" keyword to stop recording
-                    if (lowerCaseCommandArray.Length > 0 && lowerCaseCommandArray[0] == "endif")
-                    {
-                        isRecordingCommands = false;
-
-                        // Execute the recorded commands if the condition is met
-                        if (EvaluateCondition())
-                        {
-                            foreach (var recordedCommand in recordedCommands)
-                            {
-                                ExecuteSingleCommand(recordedCommand);
-                            }
-                        }
-
-                        // Clear the recorded commands for the next "if" block
-                        recordedCommands.Clear();
-                    }
-                    else
-                    {
-                        // Check for "if" keyword to start recording
-                        if (lowerCaseCommandArray.Length > 0 && lowerCaseCommandArray[0] == "if")
-                        {
-                            isRecordingCommands = true;
-                        }
-                        else
-                        {
-                            // Execute the command
-                            ExecuteSingleCommand(command);
-                        }
-                    }
-                }*/
-                
 
                 if (lowerCaseCommandArray.Length > 0)
                 {
