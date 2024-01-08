@@ -124,6 +124,16 @@ namespace Component1
             }
         }
 
+        private void ValidateDrawCircleSyntax(string[] commandArray)
+        {
+            if (commandArray.Length != 2 && commandArray.Length != 3
+                || !int.TryParse(commandArray[1], out _)
+                || (commandArray.Length == 3 && !bool.TryParse(commandArray[2], out _)))
+            {
+                throw new ArgumentException("Invalid syntax for 'drawcircle' command.");
+            }
+        }
+
         /// <summary>
         /// Checks the syntax of the provided command array.
         /// Acts like a gate keeper
