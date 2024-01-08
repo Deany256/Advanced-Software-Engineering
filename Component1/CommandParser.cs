@@ -152,6 +152,15 @@ namespace Component1
             }
         }
 
+        private void ValidateIfSyntax(string[] commandArray)
+        {
+            if (commandArray.Length != 3)
+            {
+                throw new ArgumentException("Invalid syntax for 'if' command.");
+            }
+            // Add additional validation for the condition if needed
+        }
+
         /// <summary>
         /// Checks the syntax of the provided command array.
         /// Acts like a gate keeper
