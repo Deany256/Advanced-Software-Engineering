@@ -71,6 +71,13 @@ namespace Component1
 
         }
 
+        private bool ContainsOperator(string condition)
+        {
+            // Check if the condition contains any of the specified operators
+            return condition.Contains("=") || condition.Contains("<") || condition.Contains(">")
+                || condition.Contains("<=") || condition.Contains(">=");
+        }
+
         private void ValidateSingleCommandSyntax(string[] commandArray, int expectedLength)
         {
             if (commandArray.Length != expectedLength)
@@ -154,11 +161,10 @@ namespace Component1
 
         private void ValidateIfSyntax(string[] commandArray)
         {
-            if (commandArray.Length != 3)
+            if (commandArray.Length != 4 || !ContainsOperator(commandArray[2]))
             {
                 throw new ArgumentException("Invalid syntax for 'if' command.");
             }
-            // Add additional validation for the condition if needed
         }
 
         /// <summary>
