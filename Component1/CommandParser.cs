@@ -180,115 +180,45 @@ namespace Component1
             switch (command)
             {
                 case "clear":
-                    if (commandArray.Length != 1)
-                    {
-                        throw new ArgumentException("Invalid syntax for 'clear' command.");
-                    }
-                    break;
-
                 case "reset":
-                    if (commandArray.Length != 1)
-                    {
-                        throw new ArgumentException("Invalid syntax for 'reset' command.");
-                    }
+                    ValidateSingleCommandSyntax(commandArray, 1);
                     break;
 
                 case "moveto":
-                    if (commandArray.Length != 3 || !int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'moveto' command.");
-                    }
-                    break;
-
                 case "drawto":
-                    if (commandArray.Length != 3 || !int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'drawto' command.");
-                    }
+                    ValidateSingleCommandSyntax(commandArray, 3);
+                    ValidateIntParameters(commandArray, 1, 2);
                     break;
 
                 case "save":
-                    if (commandArray.Length != 2)
-                    {
-                        throw new ArgumentException("Enter save name");
-                    }
-                    break;
-
                 case "load":
-                    if (commandArray.Length != 2)
-                    {
-                        throw new ArgumentException("Enter save name");
-                    }
+                    ValidateSingleCommandSyntax(commandArray, 2);
                     break;
 
                 case "setcolour":
-                    // 'setcolour' command can take either a preset color or RGB values
-                    if (commandArray.Length != 2 && commandArray.Length != 4)
-                    {
-                        throw new ArgumentException("Invalid syntax for 'setcolour' command.");
-                    }
-
-                    // Check for preset color
-                    if (commandArray.Length == 2)
-                    {
-                        // Add more preset color checks as needed
-                        string presetColor = commandArray[1].ToLower();
-                        if (presetColor != "red" && presetColor != "blue" && presetColor != "green")
-                        {
-                            throw new ArgumentException("Invalid preset color for 'setcolour' command.");
-                        }
-                    }
-                    else // Check for RGB values
-                    {
-                        if (!int.TryParse(commandArray[1], out _) || !int.TryParse(commandArray[2], out _) || !int.TryParse(commandArray[3], out _))
-                        {
-                            throw new ArgumentException("Invalid RGB values for 'setcolour' command.");
-                        }
-                    }
-                    break;
-
-                case "drawrectangle":
-                    if (commandArray.Length != 3 && commandArray.Length != 4
-                        || !int.TryParse(commandArray[1], out _)
-                        || !int.TryParse(commandArray[2], out _)
-                        || (commandArray.Length == 4 && !bool.TryParse(commandArray[3], out _)))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'DrawRectangle' command.");
-                    }
-                    break;
-
-                case "drawcircle":
-                    if (commandArray.Length != 2 && commandArray.Length != 3
-                        || !int.TryParse(commandArray[1], out _)
-                        || (commandArray.Length == 3 && !bool.TryParse(commandArray[2], out _)))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'DrawCircle' command.");
-                    }
-                    break;
-
-                case "drawtriangle":
-                    if (commandArray.Length != 2 && commandArray.Length != 3
-                        || !int.TryParse(commandArray[1], out _)
-                        || (commandArray.Length == 3 && !bool.TryParse(commandArray[2], out _)))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'DrawTriangle' command.");
-                    }
+                    ValidateSetColourSyntax(commandArray);
                     break;
 
                 // Add more cases for other commands
 
+                case "drawrectangle":
+                    ValidateDrawRectangleSyntax(commandArray);
+                    break;
+
+                case "drawcircle":
+                    ValidateDrawCircleSyntax(commandArray);
+                    break;
+
+                case "drawtriangle":
+                    ValidateDrawTriangleSyntax(commandArray);
+                    break;
+
                 case "var":
-                    if (commandArray.Length != 3 || !int.TryParse(commandArray[2], out _))
-                    {
-                        throw new ArgumentException("Invalid syntax for 'var' command.");
-                    }
+                    ValidateVariableSyntax(commandArray);
                     break;
 
                 case "if":
-                    if (commandArray.Length != 3)
-                    {
-                        throw new ArgumentException("Invalid syntax for 'if' command.");
-                    }
+                    ValidateIfSyntax(commandArray);
                     break;
 
                 default:
