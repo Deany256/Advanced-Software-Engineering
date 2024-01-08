@@ -84,6 +84,7 @@ namespace Component1
             }
 
             string command = commandArray[0];
+            command = command.Replace(" ", "");
 
             // Add more checks for other valid commands and their required attributes
             switch (command)
@@ -193,6 +194,13 @@ namespace Component1
                     }
                     break;
 
+                case "if":
+                    if (commandArray.Length != 3)
+                    {
+                        throw new ArgumentException("Invalid syntax for 'if' command.");
+                    }
+                    break;
+
                 default:
                     throw new ArgumentException("Invalid command.");
             }
@@ -209,11 +217,23 @@ namespace Component1
             {
                 var g = formInstance.pictureBox1.CreateGraphics();
 
+                string[] commandArray = null;
+                string[] lowerCaseCommandArray = null;
+
+                if (command.Contains("(") || command.Contains(")")) 
+                {
+                    commandArray = command.Split('(', ')');
+                } else
+                {
+                    commandArray = command.Split(' ');
+                    lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
+                }
+
                 // Split the command into an array of strings
-                string[] commandArray = command.Split(' ');
+                // string[] commandArray = command.Split(' ');
 
                 // Convert the commandArray to lowercase for case-insensitive comparison
-                string[] lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
+                lowerCaseCommandArray = commandArray.Select(cmd => cmd.ToLower()).ToArray();
 
                 // Create a list of StringIntPair structs
                 List<Variablestorage> variable = new List<Variablestorage>();
@@ -381,7 +401,20 @@ namespace Component1
                             SendMessage("valid variable");
                             break;
 
+                        case "if":
+
+                            break;
+
                         default:
+                            // check if first string is a variable name
+                            if (variable.Any(item => item.Text == lowerCaseCommandArray[0]))
+                            {
+                                Console.WriteLine(" exists in the list.");
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Invalid command.");
+                            }
                             throw new ArgumentException("Invalid command.");
                     }
                 }
