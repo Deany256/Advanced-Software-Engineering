@@ -71,6 +71,16 @@ namespace Component1
 
         }
 
+        private void ValidateSingleCommandSyntax(string[] commandArray, int expectedLength)
+        {
+            if (commandArray.Length != expectedLength)
+            {
+                throw new ArgumentException($"Invalid syntax for '{commandArray[0]}' command.");
+            }
+        }
+
+        
+
         /// <summary>
         /// Checks the syntax of the provided command array.
         /// Acts like a gate keeper
