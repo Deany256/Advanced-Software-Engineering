@@ -79,6 +79,17 @@ namespace Component1
             }
         }
 
+        private void ValidateIntParameters(string[] commandArray, params int[] indices)
+        {
+            foreach (var index in indices)
+            {
+                if (!int.TryParse(commandArray[index], out _))
+                {
+                    throw new ArgumentException($"Invalid parameter '{commandArray[index]}' for the command.");
+                }
+            }
+        }
+
         
 
         /// <summary>
